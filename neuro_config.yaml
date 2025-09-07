@@ -1,0 +1,41 @@
+paths:
+  base_dir: C:\Users\sagni\Downloads\Agri Mind
+  archive: C:\Users\sagni\Downloads\Agri Mind\archive
+  preprocess_pkl: C:\Users\sagni\Downloads\Agri Mind\neuro_preprocess.pkl
+  model_h5: C:\Users\sagni\Downloads\Agri Mind\neuro_model.h5
+  metrics_json: C:\Users\sagni\Downloads\Agri Mind\neuro_metrics.json
+  feature_names_json: C:\Users\sagni\Downloads\Agri Mind\neuro_feature_names.json
+  history_csv: C:\Users\sagni\Downloads\Agri Mind\neuro_history.csv
+training:
+  random_seed: 42
+  test_size: 0.2
+  batch_size: 256
+  epochs: 25
+  optimizer: adam
+  loss: mse
+  callbacks:
+  - EarlyStopping(patience=8)
+  - ReduceLROnPlateau(patience=4)
+  - CSVLogger
+model:
+  name: AgriMindYieldNet
+  layers:
+  - Dense(256,relu)
+  - BN
+  - Dropout(0.25)
+  - Dense(128,relu)
+  - BN
+  - Dropout(0.25)
+  - Dense(64,relu)
+  - Dense(1,linear)
+  input_dim: 115
+target: hg/ha_yield
+columns:
+  numeric:
+  - Year
+  - average_rain_fall_mm_per_year
+  - pesticides_tonnes
+  - avg_temp
+  categorical:
+  - Area
+  - Item
